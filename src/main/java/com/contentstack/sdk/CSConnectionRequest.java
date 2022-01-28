@@ -73,7 +73,6 @@ class CSConnectionRequest implements IRequestModelHTTP {
         if (objects[4] != null) {
             resultCallBack = (ResultCallBack) objects[4];
         }
-        sendRequest();
     }
 
     @Override

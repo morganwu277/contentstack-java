@@ -18,9 +18,11 @@ class CSBackgroundTask {
         String completeUrl = stackInstance.config.getEndpoint() + url;
         CSConnectionRequest csConnectionRequest = new CSConnectionRequest(stackInstance);
         csConnectionRequest.setStackInstance(stackInstance);
-        csConnectionRequest.setURLQueries(urlParams);
-        csConnectionRequest.setParams(completeUrl, headers, controller, requestInfo, callback);
-
+        // since some entries of urlParams and headers are being removed by official ContentStack design
+        // so we have to keep a separate copy
+        csConnectionRequest.setURLQueries(new HashMap<>(urlParams));
+        csConnectionRequest.setParams(completeUrl, new LinkedHashMap<>((headers)), controller, requestInfo, callback);
+        csConnectionRequest.sendRequest();
     }
 
     protected CSBackgroundTask(Query queryInstance, Stack stackInstance, String controller, String url,
@@ -30,9 +32,11 @@ class CSBackgroundTask {
         String completeUrl = stackInstance.config.getEndpoint() + url;
         CSConnectionRequest csConnectionRequest = new CSConnectionRequest(queryInstance);
         csConnectionRequest.setQueryInstance(queryInstance);
-        csConnectionRequest.setURLQueries(urlQueries);
-        csConnectionRequest.setParams(completeUrl, headers, controller, requestInfo, callback);
-
+        // since some entries of urlParams and headers are being removed by official ContentStack design
+        // so we have to keep a separate copy
+        csConnectionRequest.setURLQueries(new HashMap<>(urlQueries));
+        csConnectionRequest.setParams(completeUrl, new LinkedHashMap<>(headers), controller, requestInfo, callback);
+        csConnectionRequest.sendRequest();
     }
 
     protected CSBackgroundTask(Entry entryInstance, Stack stackInstance, String controller, String url,
@@ -41,8 +45,11 @@ class CSBackgroundTask {
         checkHeader(headers);
         String completeUrl = stackInstance.config.getEndpoint() + url;
         CSConnectionRequest csConnectionRequest = new CSConnectionRequest(entryInstance);
-        csConnectionRequest.setURLQueries(urlQueries);
-        csConnectionRequest.setParams(completeUrl, headers, controller, requestInfo, callBack);
+        // since some entries of urlParams and headers are being removed by official ContentStack design
+        // so we have to keep a separate copy
+        csConnectionRequest.setURLQueries(new HashMap<>(urlQueries));
+        csConnectionRequest.setParams(completeUrl, new LinkedHashMap<>(headers), controller, requestInfo, callBack);
+        csConnectionRequest.sendRequest();
     }
 
     protected CSBackgroundTask(AssetLibrary assetLibrary, Stack stackInstance, String controller, String url,
@@ -51,9 +58,11 @@ class CSBackgroundTask {
         checkHeader(headers);
         String completeUrl = stackInstance.config.getEndpoint() + url;
         CSConnectionRequest csConnectionRequest = new CSConnectionRequest(assetLibrary);
-        csConnectionRequest.setURLQueries(urlQueries);
-        csConnectionRequest.setParams(completeUrl, headers, controller, requestInfo, callback);
-
+        // since some entries of urlParams and headers are being removed by official ContentStack design
+        // so we have to keep a separate copy
+        csConnectionRequest.setURLQueries(new HashMap<>(urlQueries));
+        csConnectionRequest.setParams(completeUrl, new LinkedHashMap<>(headers), controller, requestInfo, callback);
+        csConnectionRequest.sendRequest();
     }
 
     protected CSBackgroundTask(Asset asset, Stack stackInstance, String controller, String url,
@@ -62,8 +71,11 @@ class CSBackgroundTask {
         checkHeader(headers);
         String completeUrl = stackInstance.config.getEndpoint() + url;
         CSConnectionRequest csConnectionRequest = new CSConnectionRequest(asset);
-        csConnectionRequest.setURLQueries(urlQueries);
-        csConnectionRequest.setParams(completeUrl, headers, controller, requestInfo, callback);
+        // since some entries of urlParams and headers are being removed by official ContentStack design
+        // so we have to keep a separate copy
+        csConnectionRequest.setURLQueries(new HashMap<>(urlQueries));
+        csConnectionRequest.setParams(completeUrl, new LinkedHashMap<>(headers), controller, requestInfo, callback);
+        csConnectionRequest.sendRequest();
     }
 
     protected CSBackgroundTask(ContentType contentType, Stack stackInstance, String controller, String url,
@@ -72,8 +84,11 @@ class CSBackgroundTask {
         checkHeader(headers);
         String completeUrl = stackInstance.config.getEndpoint() + url;
         CSConnectionRequest csConnectionRequest = new CSConnectionRequest(contentType);
-        csConnectionRequest.setURLQueries(urlParams);
-        csConnectionRequest.setParams(completeUrl, headers, controller, requestInfo, callback);
+        // since some entries of urlParams and headers are being removed by official ContentStack design
+        // so we have to keep a separate copy
+        csConnectionRequest.setURLQueries(new HashMap<>(urlParams));
+        csConnectionRequest.setParams(completeUrl, new LinkedHashMap<>(headers), controller, requestInfo, callback);
+        csConnectionRequest.sendRequest();
     }
 
     protected void checkHeader(@NotNull Map<String, Object> headers) {

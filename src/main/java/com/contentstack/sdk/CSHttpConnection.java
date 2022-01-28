@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import static com.contentstack.sdk.Constants.*;
@@ -33,6 +34,8 @@ public class CSHttpConnection implements IURLRequestHTTP {
     private JSONObject responseJSON;
     private HashMap<String, Object> formParams;
     private final String utfType = String.valueOf(StandardCharsets.UTF_8);
+    // contains <baseUrl, APIService>
+    private static Map<String, APIService> serviceMap = new ConcurrentHashMap<>();
 
     public CSHttpConnection(String urlToCall, IRequestModelHTTP csConnectionRequest) {
         this.urlPath = urlToCall;
@@ -182,8 +185,13 @@ public class CSHttpConnection implements IURLRequestHTTP {
     }
 
     private void getService(String requestUrl) throws IOException {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(this.endpoint).build();
-        APIService service = retrofit.create(APIService.class);
+        // so we don't create multiple Retrofit instance for multiple requests
+        // each Retrofit does have one connection pool and thread pool
+        // we have to share usage of Retrofit instance
+        APIService service = serviceMap.computeIfAbsent(this.endpoint, endpoint -> {
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(endpoint).build();
+            return retrofit.create(APIService.class);
+        });
         this.headers.remove(Constants.ENVIRONMENT);
         this.headers.put(X_USER_AGENT, CLIENT_USER_AGENT);
         this.headers.put(CONTENT_TYPE, APPLICATION_JSON);
